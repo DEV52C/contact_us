@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Анимированный лендинг</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Exo+2:wght@100;400;700&display=swap" rel="stylesheet">
+    <style>
+        body, html {
+            margin: 0;
+            padding: 0;
+            height: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background: linear-gradient(135deg, #000000, #1a1a1a, #2c2c2c);
+            color: white;
+            font-family: 'Exo 2', sans-serif;
+            overflow: hidden;
+            perspective: 1000px;
+        }
+        .container {
+            text-align: center;
+            position: relative;
+            z-index: 1;
+        }
+        .image-container {
+            width: 300px;
+            height: 300px;
+            position: relative;
+            margin: 0 auto 40px;
+            transform-style: preserve-3d;
+            animation: rotate3D 15s infinite linear;
+        }
+        .image {
+            width: 152px;
+            height: 67px;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            opacity: 0.7;
+            transition: all 0.5s;
+        }
+        .image:nth-child(1) { transform: translate(-50%, -50%) translateZ(100px); }
+        .image:nth-child(2) { transform: translate(-50%, -50%) rotateY(72deg) translateZ(100px); }
+        .image:nth-child(3) { transform: translate(-50%, -50%) rotateY(144deg) translateZ(100px); }
+        .image:nth-child(4) { transform: translate(-50%, -50%) rotateY(216deg) translateZ(100px); }
+        .image:nth-child(5) { transform: translate(-50%, -50%) rotateY(288deg) translateZ(100px); }
+        .button {
+            display: inline-block;
+            padding: 12px 24px;
+            margin: 15px;
+            background: linear-gradient(90deg, #ffffff, #d0d0d0, #a0a0a0, #d0d0d0, #ffffff);
+            background-size: 400% 100%;
+            color: #000000;
+            text-decoration: none;
+            border-radius: 25px;
+            font-weight: bold;
+            transition: all 0.3s ease;
+            opacity: 0;
+            transform: translateY(20px);
+            animation: fadeInUp 0.6s forwards, gradientShift 5s linear infinite;
+            position: relative;
+            overflow: hidden;
+        }
+        .button::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(255,255,255,0.3) 0%, rgba(255,255,255,0) 70%);
+            transform: rotate(45deg);
+            animation: shineEffect 3s linear infinite;
+        }
+        .button:hover {
+            transform: scale(1.05) translateY(-3px);
+            box-shadow: 0 10px 20px rgba(255,255,255,0.1);
+        }
+        h2 {
+            font-size: 2em;
+            margin-bottom: 20px;
+            opacity: 0;
+            transform: translateY(20px);
+            animation: fadeInUp 0.6s forwards;
+        }
+        @keyframes rotate3D {
+            0% { transform: rotateY(0); }
+            100% { transform: rotateY(360deg); }
+        }
+        @keyframes fadeInUp {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        @keyframes gradientShift {
+            0% { background-position: 0% 50%; }
+            100% { background-position: 400% 50%; }
+        }
+        @keyframes shineEffect {
+            0% { transform: rotate(45deg) translate(-50%, -50%); }
+            100% { transform: rotate(45deg) translate(50%, 50%); }
+        }
+        .background {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 0;
+        }
+        .star {
+            position: absolute;
+            background: white;
+            border-radius: 50%;
+            animation: twinkle var(--duration) infinite;
+            opacity: 0;
+        }
+        @keyframes twinkle {
+            0%, 100% { opacity: 0; }
+            50% { opacity: 0.5; }
+        }
+    </style>
+</head>
+<body>
+    <div class="background"></div>
+    <div class="container">
+        <div class="image-container">
+            <img src="img/logo.png" alt="Изображение" class="image">
+            <img src="img/logo.png" alt="Изображение" class="image">
+            <img src="img/logo.png" alt="Изображение" class="image">
+            <img src="img/logo.png" alt="Изображение" class="image">
+            <img src="img/logo.png" alt="Изображение" class="image">
+        </div>
+        <h2>Связаться с нами</h2>
+        <a href="https://t.me/your_telegram_account" class="button" target="_blank">Мы в Телеграме</a>
+        <a href="https://t.me/your_telegram_channel" class="button" target="_blank">Портфолио</a>
+        <h2>Ждем Вас!</h2>
+    </div>
+    <script>
+        document.addEventListener('DOMContentLoaded', (event) => {
+            const elements = document.querySelectorAll('.image-container, .button, h2');
+            elements.forEach((el, index) => {
+                setTimeout(() => {
+                    el.style.opacity = '1';
+                    el.style.transform = 'translateY(0)';
+                }, 500 + index * 200);
+            });
+
+            const background = document.querySelector('.background');
+            for (let i = 0; i < 100; i++) {
+                const star = document.createElement('div');
+                star.classList.add('star');
+                star.style.width = `${Math.random() * 3}px`;
+                star.style.height = star.style.width;
+                star.style.left = `${Math.random() * 100}%`;
+                star.style.top = `${Math.random() * 100}%`;
+                star.style.setProperty('--duration', `${Math.random() * 3 + 1}s`);
+                background.appendChild(star);
+            }
+        });
+    </script>
+</body>
+</html>
